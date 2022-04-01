@@ -1,21 +1,153 @@
-<!doctype html>
-<html lang='en'>
-
-<head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <!-- Boxicons CSS -->
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="stylesheet" href="static/css/estilos.css" class="">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-    <title>Hola</title>
-</head>
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="/DesarrolloWebBackend/static/css/style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Tiyanquiztli</title>
+  </head>
 
-<body>
-    <h1>Prueba Heroku</h1>
+  <body>
+    <header class="header" id="inicio">
+      <img src="/DesarrolloWebBackend/static/img/hamburger.svg" alt="" class="hamburger" />
+      <nav class="menu-navegacion">
+        <a href="#inicio">Inicio</a>
+        <a href="#servicio">Servicio</a>
+        <a href="#catalogo">Catalogo</a>
+        <a href="#expertos">Expertos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div class="contenedor head">
+        <h1 class="titulo">
+          Tiyanquiztli<br />
+          <h2>Mercado en Náhuatl</h2>
+        </h1>
+        <br />
+        <p class="copy">
+          Calzado artesanal que apoya a su comunidad!
+        </p>
+      </div>
+    </header>
 
-</body>
+    <main>
+      <section class="contenedor" id="servicio">
+        <h2 class="subtitulo">Nuestra propuesta</h2>
+        <div class="contenedor-servicio">
+          <img src="/DesarrolloWebBackend/static/img/checklist.svg" alt="" />
 
+          <div class="checklist-servicio">
+            <div class="service">
+              <h3 class="n-service"><span class="number">1</span>Objetivo</h3>
+              <p>
+                Permitir que las personas que realizan calzado artesanal y no
+                tienen una manera de competir con grandes empresas puedan
+                promover sus productos en un sitio web teniendo mayor exposición
+                y pudiendo llegar a más posibles compradores generando valor y
+                reconocimiento para su comunidad.
+              </p>
+            </div>
+            <div class="service">
+              <h3 class="n-service">
+                <span class="number">2</span>¿A quién apoyamos?
+              </h3>
+              <p>
+                A las Comunidades indígenas para ayudarles a poder vender sus
+                productos y llegar a más lugares, ofreciendo una experiencia de
+                compra unica.
+              </p>
+            </div>
+            <div class="service">
+              <h3 class="n-service">
+                <span class="number">3</span>¿Por qué comprar con nosotros?
+              </h3>
+              <p>
+                El objetivo de esta empresa es sin fines de lucro con el único
+                propósito de ser un medio para llegar a más personas y que la
+                distancia no sea un limitante para que las comunidades puedan
+                competir en el mercado moderno.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="gallery" id="catalogo">
+        <div class="contenedor">
+          <h2 class="subtitulo">Galeria</h2>
+          <div class="contenedor-galeria">
+            <img src="/DesarrolloWebBackend/static/img/gallery/1.jfif" alt="" class="img-galeria" />
+            <img src="/DesarrolloWebBackend/static/img/gallery/2.jfif" alt="" class="img-galeria" />
+            <img src="/DesarrolloWebBackend/static/img/gallery/3.jfif" alt="" class="img-galeria" />
+            <img src="/DesarrolloWebBackend/static/img/gallery/4.jfif" alt="" class="img-galeria" />
+            <img src="/DesarrolloWebBackend/static/img/gallery/5.jfif" alt="" class="img-galeria" />
+            <img src="/DesarrolloWebBackend/static/img/gallery/6.jfif" alt="" class="img-galeria" />
+          </div>
+        </div>
+      </section>
+
+      <section class="imagen-light">
+        <img src="/DesarrolloWebBackend/static/img/close.min.svg" alt="" class="close" />
+        <img src="#" alt="" class="agregar-imagen" />
+      </section>
+
+      <section class="contenedor" id="expertos">
+        <h2 class="subtitulo">Expertos en:</h2>
+        <section class="experts">
+          <div class="cont-experts">
+            <img src="/DesarrolloWebBackend/static/img/gallery/zapato.png" alt="" id="calzado" />
+            <h3 class="n-expert">Calzado</h3>
+          </div>
+          <div class="cont-experts">
+            <img src="/DesarrolloWebBackend/static/img/gallery/knittingWoman.jpg" alt="" />
+            <h3 class="n-expert">Accesorios</h3>
+          </div>
+          <div class="cont-experts">
+            <img src="/DesarrolloWebBackend/static/img/gallery/seguridad.svg" alt="" />
+            <h3 class="n-expert">Ropa</h3>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer id="contacto">
+      <div class="contenedor footer-content">
+        <div class="contact-us">
+          <h2 class="brand">Integrantes</h2>
+          <p>
+            Arturo Márquez / Humberto Carrillo / Andrés Reyes / Rubén
+            Villalpando / David Medina
+          </p>
+        </div>
+        <div class="social-media">
+          <a href="https://www.yobiss.com" class="social-media-icon">
+            <i class="bx bx-face bx-lg"></i>
+          </a>
+          <a href="./" class="social-media-icon">
+            <i class="bx bxl-instagram-alt bx-lg"></i>
+          </a>
+          <a href="./" class="social-media-icon" id="calzado">
+            <i class="bx bxl-instagram-alt bx-lg"></i>
+          </a>
+        </div>
+      </div>
+      <div class="line"></div>
+    </footer>
+
+    <script src="/DesarrolloWebBackend/static/js/menu.js"></script>
+    <script src="/DesarrolloWebBackend/static/js/lightbox.js"></script>
+  </body>
 </html>
