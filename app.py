@@ -10,5 +10,5 @@ def home():
     return render_template('index.html')
 
 @app.route('/prueba')
-def home():
+def prueba():
     return ("A01376086")
