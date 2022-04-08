@@ -9,6 +9,7 @@ import datetime
 app = Flask(__name__)
 #Con las siguientes lineas se puede mantener la sesión del usuario por un año.
 app.permanent_session_lifetime = datetime.timedelta(days=365)
+#Con esta llave, la sesión queda encriptada.
 app.secret_key = "super secret key"
 #############################################################
 
@@ -18,7 +19,7 @@ def home():
     email = None
     if "email" in session:
         email = session["email"]
-        return render_template('index.html', error = "email")
+        return render_template('index.html', data = "email")
     else:
         return render_template("Login.html", data = email)
 
@@ -47,17 +48,17 @@ def prueba2():
 def login():
     email = None
     if "email" in session:
-        return render_template('index.html', error = email)
+        return render_template('index.html', data = email)
         #return redirect(url_for("home"))
     else: 
         if(request.method == "GET"):
-            return render_template('Login.html', error = email)
+            return render_template('Login.html', data = email)
         else:
             email = request.form["email"]
             password = request.form["password"]
             #Asignamos un correro adentro de la sesión.
             session["email"] = email
-            return render_template('index.html', error = email)
+            return render_template('index.html', data = email)
 
 #Página para el signup.
 @app.route("/signup", methods=["GET", "POST"])
