@@ -1,7 +1,7 @@
 #from crypt import methods
 from datetime import datetime
 import email
-from flask import Flask, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for
 import datetime
 
 # FlASK
@@ -12,6 +12,7 @@ app.permanent_session_lifetime = datetime.timedelta(days=365)
 #Con esta llave, la sesión queda encriptada.
 app.secret_key = "super secret key"
 #############################################################
+
 
 @app.route('/')
 def home():
@@ -48,7 +49,7 @@ def prueba2():
 def login():
     email = None
     if "email" in session:
-        return render_template('index.html', data = email)
+        return render_template('index.html', data = session["email"])
         #return redirect(url_for("home"))
     else: 
         if(request.method == "GET"):
@@ -59,6 +60,7 @@ def login():
             #Asignamos un correro adentro de la sesión.
             session["email"] = email
             return render_template('index.html', data = email)
+
 
 #Página para el signup.
 @app.route("/signup", methods=["GET", "POST"])
@@ -71,3 +73,12 @@ def signup():
         email = request.form["email"]
         password = request.form["password"]
         return render_template('index.html', data = email)
+
+
+#Ruta para el logout.
+@app.route("/logout")
+def logout():
+    if "email" in session:
+        session.clear()
+        return redirect(url_for("home"))
+    
