@@ -25,11 +25,13 @@
     <header class="header" id="inicio">
       <img src="static/img/hamburger.svg" alt="" class="hamburger" />
       <nav class="menu-navegacion">
+        <a href="/login">Login</a>
         <a href="#inicio">Inicio</a>
         <a href="#servicio">Servicio</a>
         <a href="#catalogo">Catalogo</a>
         <a href="#expertos">Expertos</a>
         <a href="#contacto">Contacto</a>
+        <a href="/logout">Logout</a>
       </nav>
       <div class="contenedor head">
         <h1 class="titulo">
@@ -130,6 +132,9 @@
           <p>
             Arturo Márquez / Humberto Carrillo / Andrés Reyes / Rubén
             Villalpando / David Medina
+          </p>
+          <p> <br>
+            Logged in as: {{error}}
           </p>
         </div>
         <div class="social-media">
