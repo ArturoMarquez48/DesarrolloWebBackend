@@ -1,14 +1,26 @@
 #from crypt import methods
-from flask import Flask, render_template, request
+from datetime import datetime
+import email
+from flask import Flask, render_template, request, session, url_for
+import datetime
 
 # FlASK
 #############################################################
 app = Flask(__name__)
+#Con las siguientes lineas se puede mantener la sesión del usuario por un año.
+app.permanent_session_lifetime = datetime.timedelta(days=365)
+app.secret_key = "super secret key"
 #############################################################
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    #Si sí está el email en la sesión, lo manda al index.
+    email = None
+    if "email" in session:
+        email = session["email"]
+        return render_template('index.html', error = "email")
+    else:
+        return render_template("Login.html", data = email)
 
 @app.route('/prueba')
 def prueba():
@@ -33,22 +45,28 @@ def prueba2():
 #Página para el login.
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if(request.method == "GET"):
-        email = None
-        return render_template('Login.html', error = email)
-    else:
-        email = request.form["email"]
-        password = request.form["password"]
+    email = None
+    if "email" in session:
         return render_template('index.html', error = email)
+        #return redirect(url_for("home"))
+    else: 
+        if(request.method == "GET"):
+            return render_template('Login.html', error = email)
+        else:
+            email = request.form["email"]
+            password = request.form["password"]
+            #Asignamos un correro adentro de la sesión.
+            session["email"] = email
+            return render_template('index.html', error = email)
 
 #Página para el signup.
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    email = None
     if(request.method == "GET"):
-        email = None
-        return render_template('Login.html', error = email)
+        return render_template('Login.html', data = email)
     else:
         name = request.form["name"]
         email = request.form["email"]
         password = request.form["password"]
-        return render_template('index.html', error = email)
+        return render_template('index.html', data = email)
