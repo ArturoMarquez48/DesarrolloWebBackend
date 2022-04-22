@@ -1,10 +1,15 @@
 #from crypt import methods
 from datetime import datetime
 import email
+from email import message
 from re import T
+from unicodedata import name
 from flask import Flask, redirect, render_template, request, session, url_for
 import datetime
 import pymongo
+#from twilio.rest import Client
+import decouple
+
 
 # FlASK
 #############################################################
@@ -17,24 +22,33 @@ app.secret_key = "super secret key"
 
 # MONGODB
 #############################################################
-mongodb_key = "mongodb+srv://desarrollowebuser:desarrollowebpassword@cluster0.dfh7g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+mongodb_keyClase = "mongodb+srv://desarrollowebuser:desarrollowebpassword@cluster0.dfh7g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+mongodb_key = "mongodb+srv://desarrollowebuser:desarrollowebpassword@cluster0.f46no.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 client = pymongo.MongoClient(
     mongodb_key, tls=True, tlsAllowInvalidCertificates=True)
-db = client.Escuela
-cuentas = db.alumno
+db = client.app
+cuentas = db.usuarios
 #############################################################
 
+
+# Twilio
+#############################################################
+account_sid = ""
+auth_token = ""
+#TwilioClient = Client(account_sid, auth_token)
+#############################################################
 
 
 @app.route('/')
 def home():
     #Si sí está el email en la sesión, lo manda al index.
     email = None
-    if "email" in session:
+    if cuentas in session:
         email = session["email"]
         return render_template('index.html', data = "email")
     else:
-        return render_template("Login.html", data = email)
+        return render_template("Login.html", data = None)
+
 
 @app.route('/prueba')
 def prueba():
@@ -60,18 +74,23 @@ def prueba2():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     email = None
-    if "email" in session:
+    if cuentas in session:
         return render_template('index.html', data = session["email"])
         #return redirect(url_for("home"))
-    else: 
-        if(request.method == "GET"):
-            return render_template('Login.html', data = email)
+    else:
+        email = request.form["email"]
+        password = request.form["password"]
+        busqueda = cuentas.find_one({"email": (email)})
+        if busqueda == None:
+            return render_template('Login.html', data = None)
         else:
-            email = request.form["email"]
-            password = request.form["password"]
-            #Asignamos un correro adentro de la sesión.
-            session["email"] = email
-            return render_template('index.html', data = email)
+
+            if password == password:
+                #Asignamos un correro adentro de la sesión.
+                session["email"] = email
+                return render_template('index.html', data = email)
+            else:
+                return render_template('Login.html', data = None)
 
 
 #Página para el signup.
@@ -81,18 +100,31 @@ def signup():
     if(request.method == "GET"):
         return render_template('Login.html', data = email)
     else:
-        name = request.form["name"]
+        user = {
+            "name": request.form["name"],
+            "email": request.form["email"],
+            "password": request.form["password"],
+        }
         email = request.form["email"]
-        password = request.form["password"]
-        return render_template('index.html', data = email)
+        busqueda = cuentas.find_one({ "email": (email) })
+        if busqueda == None:
+            try:
+                cuentas.insert_one(user)
+                return render_template('index.html', data = email)
+            except Exception as e:
+                return "<p> El servicio no está disponible =>: %s." % (e)
+        else:
+            return render_template('Login.html', data = None)
 
 
 #Ruta para el logout.
 @app.route("/logout")
 def logout():
-    if "email" in session:
+    if cuentas in session:
         session.clear()
         return redirect(url_for("home"))
+    else: 
+        pass
 
 
 @app.route("/usuarios")
@@ -102,6 +134,7 @@ def usuarios():
     for doc in cursor:
         users.append(doc)
     return render_template("/usuarios.html", data=users)
+
 
 @app.route("/insert", methods = ["POST"])
 def insertUsers():
@@ -114,6 +147,11 @@ def insertUsers():
 
     try:
         cuentas.insert_one(user)
+        # message = TwilioClient.message.create(
+        #     from_="whatsapp:+525512345678",
+        #     body = "El usuario %s se agregó a tu página web",
+        #     to = "whatsapp:+525512345678"
+        #     )
         return redirect(url_for("usuarios"))
     except Exception as e:
         return "<p> El servicio no está disponible =>: %s %s." % type(e), e
