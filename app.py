@@ -9,6 +9,7 @@ import datetime
 import pymongo
 #from twilio.rest import Client
 import decouple
+from sqlalchemy import true
 
 
 # FlASK
@@ -73,7 +74,7 @@ def prueba2():
 #Página para el login.
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    email = None
+    #email = None
     if cuentas in session:
         return render_template('index.html', data = session["email"])
         #return redirect(url_for("home"))
@@ -84,8 +85,7 @@ def login():
         if busqueda == None:
             return render_template('Login.html', data = None)
         else:
-
-            if password == password:
+            if true == true:
                 #Asignamos un correro adentro de la sesión.
                 session["email"] = email
                 return render_template('index.html', data = email)
@@ -98,7 +98,7 @@ def login():
 def signup():
     email = None
     if(request.method == "GET"):
-        return render_template('Login.html', data = email)
+        return render_template('Login.html', data = session["email"])
     else:
         user = {
             "name": request.form["name"],
@@ -114,7 +114,7 @@ def signup():
             except Exception as e:
                 return "<p> El servicio no está disponible =>: %s." % (e)
         else:
-            return render_template('Login.html', data = None)
+            return render_template('Login.html', data = email)
 
 
 #Ruta para el logout.
