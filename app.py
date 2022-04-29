@@ -6,10 +6,12 @@ from re import T
 from unicodedata import name
 from flask import Flask, redirect, render_template, request, session, url_for
 import datetime
+from pkg_resources import require
 import pymongo
 from twilio.rest import Client
-import decouple
+from decouple import config
 from sqlalchemy import true
+
 
 
 # FlASK
@@ -23,10 +25,8 @@ app.secret_key = "super secret key"
 
 # MONGODB
 #############################################################
-mongodb_keyClase = "mongodb+srv://desarrollowebuser:desarrollowebpassword@cluster0.dfh7g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-mongodb_key = "mongodb+srv://desarrollowebuser:desarrollowebpassword@cluster0.f46no.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 client = pymongo.MongoClient(
-    mongodb_key, tls=True, tlsAllowInvalidCertificates=True)
+    config("mongodb_key"), tls=True, tlsAllowInvalidCertificates=True)
 db = client.app
 cuentas = db.usuarios
 #############################################################
@@ -34,8 +34,8 @@ cuentas = db.usuarios
 
 # Twilio
 #############################################################
-account_sid = "ACb76ee19b0db6189491c0a5b9ff510ec8"
-auth_token = "4ca35bdf4514769c05a6be9f5f47d20c"
+account_sid = config("account_sid")
+auth_token = config("auth_token")
 TwilioClient = Client(account_sid, auth_token)
 #############################################################
 
