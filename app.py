@@ -7,7 +7,7 @@ from unicodedata import name
 from flask import Flask, redirect, render_template, request, session, url_for
 import datetime
 import pymongo
-#from twilio.rest import Client
+from twilio.rest import Client
 import decouple
 from sqlalchemy import true
 
@@ -34,9 +34,9 @@ cuentas = db.usuarios
 
 # Twilio
 #############################################################
-account_sid = ""
-auth_token = ""
-#TwilioClient = Client(account_sid, auth_token)
+account_sid = "ACb76ee19b0db6189491c0a5b9ff510ec8"
+auth_token = "4ca35bdf4514769c05a6be9f5f47d20c"
+TwilioClient = Client(account_sid, auth_token)
 #############################################################
 
 
@@ -46,7 +46,7 @@ def home():
     email = None
     if cuentas in session:
         email = session["email"]
-        return render_template('index.html', data = "email")
+        return render_template('index.html', data = email)
     else:
         return render_template("Login.html", data = None)
 
@@ -74,23 +74,20 @@ def prueba2():
 #Página para el login.
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    #email = None
+    email = None
     if cuentas in session:
         return render_template('index.html', data = session["email"])
         #return redirect(url_for("home"))
     else:
         email = request.form["email"]
         password = request.form["password"]
-        busqueda = cuentas.find_one({"email": (email)})
+        busqueda = cuentas.find_one({"email": (email), "password": (password)})
         if busqueda == None:
             return render_template('Login.html', data = None)
         else:
-            if true == true:
-                #Asignamos un correro adentro de la sesión.
-                session["email"] = email
-                return render_template('index.html', data = email)
-            else:
-                return render_template('Login.html', data = None)
+            session["email"] = email
+            return render_template('index.html', data = session["email"])
+
 
 
 #Página para el signup.
@@ -106,26 +103,32 @@ def signup():
             "password": request.form["password"],
         }
         email = request.form["email"]
-        busqueda = cuentas.find_one({ "email": (email) })
+        busqueda = cuentas.find_one({"email": (email)})
         if busqueda == None:
             try:
                 cuentas.insert_one(user)
-                return render_template('index.html', data = email)
+                message = TwilioClient.messages.create(
+                    from_='whatsapp:+14155238886',
+                    body="El usuario %s se agregó a tu pagina web" % (
+                        request.form["name"]), 
+                        to='whatsapp:+5215529037543'
+                )
+                session["email"] = email
+                print(message.sid)
+                return render_template('index.html', data = session["email"])
             except Exception as e:
                 return "<p> El servicio no está disponible =>: %s." % (e)
         else:
-            return render_template('Login.html', data = email)
+            return render_template('Login.html', data = None)
 
 
 #Ruta para el logout.
 @app.route("/logout")
 def logout():
-    if cuentas in session:
-        session.clear()
-        return redirect(url_for("home"))
-    else: 
-        pass
-
+    if 'email' in session:
+        email = session['email']
+    session.clear()
+    return redirect(url_for('home'))
 
 @app.route("/usuarios")
 def usuarios():
@@ -147,11 +150,12 @@ def insertUsers():
 
     try:
         cuentas.insert_one(user)
-        # message = TwilioClient.message.create(
-        #     from_="whatsapp:+525512345678",
-        #     body = "El usuario %s se agregó a tu página web",
-        #     to = "whatsapp:+525512345678"
-        #     )
+        # message = TwilioClient.messages.create(
+        #     from_="whatsapp:+14155238886",
+        #     body="El usuario %s se agregó a tu pagina web" % (
+        #         request.form["nombre"]),
+        #     to="whatsapp:+5215514200581"
+        # )
         return redirect(url_for("usuarios"))
     except Exception as e:
         return "<p> El servicio no está disponible =>: %s %s." % type(e), e
